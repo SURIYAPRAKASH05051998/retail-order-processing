@@ -1,5 +1,7 @@
 package com.retail.order.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +65,28 @@ public class OrderService {
 						new ResponseModel<OrderDTO>(HttpResponse.CREATED.getStatusCode(),
 								HttpResponse.CREATED.getStatusMessage(), orderDTO2),
 						HttpStatus.CREATED);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<ResponseModel<OrderDTO>>(
+					new ResponseModel<OrderDTO>(HttpResponse.INVALID.getStatusCode(), e.getMessage(), null),
+					HttpStatus.CONFLICT);
+		}
+	}
+
+	public ResponseEntity<ResponseModel<OrderDTO>> getOrderById(Long orderId) {
+		try {
+			Optional<Order> orderOptional = orderRepository.findById(orderId);
+			Order order = orderOptional.orElse(null);
+			if (order == null) {
+				return new ResponseEntity<ResponseModel<OrderDTO>>(
+						new ResponseModel<OrderDTO>(HttpResponse.NO_DATA.getStatusCode(),
+								HttpResponse.NO_DATA.getStatusMessage(), null),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<ResponseModel<OrderDTO>>(
+						new ResponseModel<OrderDTO>(HttpResponse.SUCCESS.getStatusCode(),
+								HttpResponse.SUCCESS.getStatusMessage(), ObjectMapperUtils.map(order, OrderDTO.class)),
+						HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<ResponseModel<OrderDTO>>(
