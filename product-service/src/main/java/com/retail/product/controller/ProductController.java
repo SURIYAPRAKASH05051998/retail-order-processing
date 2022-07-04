@@ -17,13 +17,13 @@ import com.retail.product.model.ResponseModel;
 import com.retail.product.service.ProductService;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 public class ProductController {
 
 	@Autowired
 	private ProductService productService;
 
-	@PostMapping("create")
+	@PostMapping("/create")
 	public ResponseEntity<ResponseModel<ProductDTO>> createProduct(@RequestBody ProductDTO product) {
 		return productService.createProduct(product);
 	}

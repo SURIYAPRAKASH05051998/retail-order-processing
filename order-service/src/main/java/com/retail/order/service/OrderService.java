@@ -40,7 +40,7 @@ public class OrderService {
 			} else {
 				for (OrderItemDTO orderItemDTO : orderDTO.getOrderItems()) {
 					ProductDTO productDTO = restTemplate.getForObject(
-							"http://localhost:8005/products/get-product/" + orderItemDTO.getProductId(),
+							"http://PRODUCT-SERVICE/products/get-product/" + orderItemDTO.getProductId(),
 							ProductDTO.class);
 					if (productDTO != null) {
 						if (productDTO.getStock() < orderItemDTO.getQuantity()) {
