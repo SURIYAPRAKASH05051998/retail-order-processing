@@ -1,5 +1,7 @@
 package com.retail.order.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,4 +32,8 @@ public class OrderController {
 		return orderService.getOrderById(orderId);
 	}
 
+	@GetMapping("get-all")
+	public ResponseEntity<ResponseModel<List<OrderDTO>>> getOrders() {
+		return orderService.getOrders();
+	}
 }

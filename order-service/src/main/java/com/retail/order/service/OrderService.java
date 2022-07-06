@@ -1,5 +1,6 @@
 package com.retail.order.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,26 @@ public class OrderService {
 		} catch (Exception e) {
 			return new ResponseEntity<ResponseModel<OrderDTO>>(
 					new ResponseModel<OrderDTO>(HttpResponse.INVALID.getStatusCode(), e.getMessage(), null),
+					HttpStatus.CONFLICT);
+		}
+	}
+
+	public ResponseEntity<ResponseModel<List<OrderDTO>>> getOrders() {
+		try {
+			List<Order> orders = orderRepository.findAll();
+			if (orders.isEmpty()) {
+				return new ResponseEntity<ResponseModel<List<OrderDTO>>>(
+						new ResponseModel<List<OrderDTO>>(HttpResponse.NO_DATA.getStatusCode(),
+								HttpResponse.NO_DATA.getStatusMessage(), null),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<ResponseModel<List<OrderDTO>>>(new ResponseModel<List<OrderDTO>>(
+						HttpResponse.SUCCESS.getStatusCode(), HttpResponse.SUCCESS.getStatusMessage(),
+						ObjectMapperUtils.mapAll(orders, OrderDTO.class)), HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<ResponseModel<List<OrderDTO>>>(
+					new ResponseModel<List<OrderDTO>>(HttpResponse.INVALID.getStatusCode(), e.getMessage(), null),
 					HttpStatus.CONFLICT);
 		}
 	}
