@@ -1,24 +1,39 @@
 package com.retail.order;
 
-import org.assertj.core.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import com.retail.order.controller.OrderController;
+import com.retail.order.entity.Order;
+import com.retail.order.repository.OrderRepository;
+import com.retail.order.service.OrderService;
 
-@ExtendWith(SpringExtension.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
 class OrderServiceApplicationTests {
 
 	@Autowired
-	OrderController orderController;
+	private OrderService orderService;
+
+	@MockBean
+	private OrderRepository orderRepository;
 
 	@Test
-	void contextLoads() {
-		Assertions.assertThat(orderController).isNot(null);
+	public void getOrdersTest() {
+		when(orderRepository.findAll())
+				.thenReturn(Stream.of(new Order(Long.valueOf(1), Double.valueOf(5.0), "PROCESSED", new ArrayList<>()))
+						.collect(Collectors.toList()));
+		assertEquals(1, orderService.getOrders().getBody().getResponseModel().size());
 	}
 
 }

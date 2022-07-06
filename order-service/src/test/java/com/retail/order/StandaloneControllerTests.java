@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -19,6 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.retail.order.controller.OrderController;
 import com.retail.order.dto.OrderDTO;
+import com.retail.order.dto.OrderItemDTO;
+import com.retail.order.entity.Order;
+import com.retail.order.entity.OrderItem;
 import com.retail.order.service.OrderService;
 
 @ExtendWith(SpringExtension.class)
@@ -26,6 +29,7 @@ import com.retail.order.service.OrderService;
 public class StandaloneControllerTests {
 
 	@MockBean
+	@Autowired
 	OrderService orderService;
 
 	@Autowired
@@ -33,12 +37,13 @@ public class StandaloneControllerTests {
 
 	@Test
 	public void testfindAll() throws Exception {
-		OrderDTO order = new OrderDTO();
-		List<OrderDTO> orders = Arrays.asList(order);
+		List<OrderItem> orderItems = new ArrayList<>();
+		List<Order> orders = new ArrayList<>();
+		orders.add(new Order(Long.valueOf(1), Double.valueOf(5.0), "PROCESSED", orderItems));
 
-		Mockito.when(orderService.getOrders().getBody().getResponseModel()).thenReturn(orders);
+		Mockito.when(orderService.findAll()).thenReturn(orders);
 
-		mockMvc.perform(get("/get-all")).andExpect(status().isOk()).andExpect(jsonPath("$", Matchers.hasSize(1)));
+		mockMvc.perform(get("/get-all-orders")).andExpect(status().isOk());
 	}
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.retail.order.dto.OrderDTO;
+import com.retail.order.entity.Order;
 import com.retail.order.model.ResponseModel;
 import com.retail.order.service.OrderService;
 
@@ -35,5 +36,10 @@ public class OrderController {
 	@GetMapping("get-all")
 	public ResponseEntity<ResponseModel<List<OrderDTO>>> getOrders() {
 		return orderService.getOrders();
+	}
+
+	@GetMapping("get-all-orders")
+	public List<Order> findAll() {
+		return orderService.findAll();
 	}
 }
