@@ -15,7 +15,7 @@ public class OrderProcessListener {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	@JmsListener(destination = "orderProcessQueue", containerFactory = "myFactory")
+	//@JmsListener(destination = "orderProcessQueue", containerFactory = "myFactory")
 	public void saveHeartRateDta(OrderDTO orderDTO) {
 		Order order = ObjectMapperUtils.map(orderDTO, Order.class);
 		order.setOrderStatus("PROCESSED");
